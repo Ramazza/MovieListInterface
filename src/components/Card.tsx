@@ -40,34 +40,15 @@ const Info = styled.p`
   gap: 5px;
 `;
 
-const Description = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.9);
-  color: white;
-  padding: 10px;
-  border-radius: 8px;
-  opacity: 0;
-  transition: opacity 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: justify;
-  font-size: 0.9rem;
-
-  ${CardWrapper}:hover & {
-    opacity: 1;
-  }
-`;
-
+// 🔥 Função para extrair apenas o ano da data
 const extractYear = (dateString?: string | number): string => {
   if (!dateString) return "Desconhecido";
   if (typeof dateString === "number") return dateString.toString();
-  const yearMatch = dateString.match(/\d{4}/);
-  return yearMatch ? yearMatch[0] : "Desconhecido";
+  if (typeof dateString === "string") {
+    const yearMatch = dateString.match(/\d{4}/);
+    return yearMatch ? yearMatch[0] : "Desconhecido";
+  }
+  return "Desconhecido";
 };
 
 interface CardProps {
@@ -79,17 +60,18 @@ interface CardProps {
     score?: number;
     description?: string;
   };
+  onClick: () => void; 
 }
 
-const Card: React.FC<CardProps> = ({ movie }) => {
+const Card: React.FC<CardProps> = ({ movie, onClick }) => {
   return (
-    <CardWrapper>
+    <CardWrapper onClick={onClick}>
       <Image imageUrl={movie.posterPath} />
       <CardTitle>{movie.name}</CardTitle>
-      <Info>📅 Lançamento: {extractYear(movie.releaseDate)}</Info>
-      <Info>👀 Visto em: {extractYear(movie.date)}</Info>
+      <Info>📅 Lançamento: {extractYear(movie.releaseDate) || "Desconhecido"}</Info>
+      <Info>👀 Visto em: {extractYear(movie.date) || "Desconhecido"}</Info>
       <Info>⭐ Nota: {movie.score?.toFixed(1) ?? "N/A"}</Info>
-      <Description>{movie.description}</Description>
+
     </CardWrapper>
   );
 };
