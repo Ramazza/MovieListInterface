@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
 
 const PaginationWrapper = styled.div`
@@ -42,6 +42,10 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
     if (page >= 1 && page <= totalPages) {
       onPageChange(page);
     }
+    const topElement = document.getElementById("topo");
+    if (topElement) {
+      topElement.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   const renderPageNumbers = () => {
@@ -75,7 +79,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
 
   return (
     <>
-      <div ref={topRef}></div>
+      <div ref={topRef}></div> {/* 🔥 Elemento de referência para rolar ao topo */}
       <PaginationWrapper>
         <PageButton onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
           ⬅ Anterior
